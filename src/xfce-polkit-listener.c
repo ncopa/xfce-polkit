@@ -79,6 +79,20 @@ static void on_session_request(PolkitAgentSession* session, gchar *req,
 	gtk_entry_set_visibility(GTK_ENTRY(d->entry), visibility);
 }
 
+static void on_session_show_error(PolkitAgentSession *session, gchar *text,
+				  AuthDlgData *d)
+{
+	xfce_dialog_show_warning(GTK_WINDOW(d->auth_dlg), text,
+			       "XFCE PolicyKit Agent");
+}
+
+static void on_session_show_info(PolkitAgentSession *session, gchar *text,
+				  AuthDlgData *d)
+{
+	xfce_dialog_show_info(GTK_WINDOW(d->auth_dlg), text,
+			      "XFCE PolicyKit Agent");
+}
+
 static void on_id_combo_user_changed(GtkComboBox *combo, AuthDlgData *d)
 {
 	GtkTreeIter iter;
@@ -103,6 +117,10 @@ static void on_id_combo_user_changed(GtkComboBox *combo, AuthDlgData *d)
 			 G_CALLBACK(on_session_completed), d);
 	g_signal_connect(d->session, "request",
 			 G_CALLBACK(on_session_request), d);
+	g_signal_connect(d->session, "show-error",
+			 G_CALLBACK(on_session_show_error), d);
+	g_signal_connect(d->session, "show-info",
+			 G_CALLBACK(on_session_show_info), d);
 	polkit_agent_session_initiate(d->session);
 }
 
