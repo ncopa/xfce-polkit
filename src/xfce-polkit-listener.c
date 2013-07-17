@@ -131,6 +131,18 @@ static void add_identities(GtkComboBox *combo, GList *identities)
 				       "text", 0, NULL);
 }
 
+static GtkWidget *grid2x2(GtkWidget *top_left, GtkWidget *top_right,
+			 GtkWidget *bottom_left, GtkWidget *bottom_right)
+{
+	GtkWidget *table = gtk_table_new(2, 2, FALSE);
+	gtk_table_attach_defaults(GTK_TABLE(table), top_left, 0, 1, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), top_right, 1, 2, 0, 1);
+	gtk_table_attach_defaults(GTK_TABLE(table), bottom_left, 0, 1, 1, 2);
+	gtk_table_attach_defaults(GTK_TABLE(table), bottom_right, 1, 2, 1, 2);
+	gtk_widget_show(table);
+	return table;
+}
+
 static void initiate_authentication(PolkitAgentListener  *listener,
 				    const gchar          *action_id,
 				    const gchar          *message,
@@ -143,6 +155,8 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 				    gpointer              user_data)
 {
 	GtkWidget *content;
+	GtkWidget *combo_label;
+	GtkWidget *grid;
 	AuthDlgData *d = g_slice_new0(AuthDlgData);
 
 	char** p;
@@ -163,22 +177,25 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 			NULL);
 	content = gtk_dialog_get_content_area(GTK_DIALOG(d->auth_dlg));
 
+	combo_label = gtk_label_new("Identity:");
+	gtk_widget_show(combo_label);
+
 	d->id_combo = gtk_combo_box_new();
 	add_identities(GTK_COMBO_BOX(d->id_combo), identities);
 	g_signal_connect(d->id_combo, "changed",
 			 G_CALLBACK(on_id_combo_user_changed), d);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(d->id_combo), 0);
-	gtk_box_pack_start(GTK_BOX(content), d->id_combo, TRUE, TRUE, 0);
 	gtk_widget_show(d->id_combo);
 
 	d->entry_label = gtk_label_new(NULL);
-	gtk_box_pack_start(GTK_BOX(content), d->entry_label, TRUE, TRUE, 0);
 	gtk_widget_show(d->entry_label);
 
 	d->entry = gtk_entry_new();
 	gtk_entry_set_visibility(GTK_ENTRY(d->entry), FALSE);
-	gtk_box_pack_start(GTK_BOX(content), d->entry, TRUE, TRUE, 0);
 	gtk_widget_show(d->entry);
+
+	grid = grid2x2(combo_label, d->id_combo, d->entry_label, d->entry);
+	gtk_box_pack_start(GTK_BOX(content), grid, TRUE, TRUE, 0);
 
 	d->status = gtk_label_new(NULL);
 	gtk_box_pack_start(GTK_BOX(content), d->status, TRUE, TRUE, 0);
