@@ -13,8 +13,9 @@ int main(int argc, char *argv[])
 	listener = xfce_polkit_listener_new();
 	session = polkit_unix_session_new_for_process_sync(getpid(), NULL, NULL);
 
-	if(!polkit_agent_register_listener(listener, session, NULL,
-					   &err)) {
+	if(!polkit_agent_listener_register(listener,
+					   POLKIT_AGENT_REGISTER_FLAGS_NONE,
+					   session, NULL, NULL, &err)) {
 		xfce_dialog_show_error(NULL, err, "XFCE PolicyKit Agent");
 		rc = 1;
 	} else {
