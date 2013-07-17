@@ -124,6 +124,11 @@ static void on_id_combo_user_changed(GtkComboBox *combo, AuthDlgData *d)
 	polkit_agent_session_initiate(d->session);
 }
 
+static void on_entry_activate(GtkWidget *entry, AuthDlgData *d)
+{
+	gtk_dialog_response(GTK_DIALOG(d->auth_dlg), GTK_RESPONSE_OK);
+}
+
 static void add_identities(GtkComboBox *combo, GList *identities)
 {
 	GList *p;
@@ -211,6 +216,7 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	d->entry = gtk_entry_new();
 	gtk_entry_set_visibility(GTK_ENTRY(d->entry), FALSE);
 	gtk_widget_show(d->entry);
+	g_signal_connect (d->entry, "activate", G_CALLBACK(on_entry_activate), d);
 
 	grid = grid2x2(combo_label, d->id_combo, d->entry_label, d->entry);
 	gtk_box_pack_start(GTK_BOX(content), grid, TRUE, TRUE, 0);
