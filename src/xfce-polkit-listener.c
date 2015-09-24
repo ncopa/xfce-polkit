@@ -228,6 +228,7 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	g_signal_connect(d->auth_dlg, "response",
 			 G_CALLBACK(on_auth_dlg_response), d);
 
+	gtk_widget_grab_focus(d->entry);
 	gtk_window_present(GTK_WINDOW(d->auth_dlg));
 }
 
