@@ -27,7 +27,6 @@ static void auth_dlg_data_free(AuthDlgData *d)
 	gtk_widget_destroy(d->auth_dlg);
 	g_signal_handlers_disconnect_by_func(d->cancellable, on_cancelled, d);
 
-	g_object_unref(d->cancellable);
 	g_object_unref(d->task);
 	g_object_unref(d->session);
 	g_free(d->action_id);
