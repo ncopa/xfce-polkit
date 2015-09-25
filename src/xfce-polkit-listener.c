@@ -1,4 +1,5 @@
 
+#include <pwd.h>
 #include <libxfce4ui/libxfce4ui.h>
 
 #include "xfce-polkit-listener.h"
@@ -136,8 +137,15 @@ static void add_identities(GtkComboBox *combo, GList *identities)
 
 	store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_OBJECT);
 	for (p = identities; p != NULL; p = p->next) {
+		gchar *str = NULL;
 		PolkitIdentity *id = (PolkitIdentity *)p->data;
-		gchar *str = polkit_identity_to_string(id);
+		if(POLKIT_IS_UNIX_USER(id)) {
+			uid_t uid = polkit_unix_user_get_uid(POLKIT_UNIX_USER(id));
+			struct passwd *pwd = getpwuid(uid);
+			str = g_strdup(pwd->pw_name);
+		} else {
+			str = polkit_identity_to_string(id);
+		}
 		gtk_list_store_insert_with_values(store, NULL, -1,
 						  0, str,
 						  1, id,
