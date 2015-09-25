@@ -1,4 +1,5 @@
 
+#include <grp.h>
 #include <pwd.h>
 #include <libxfce4ui/libxfce4ui.h>
 
@@ -143,6 +144,10 @@ static void add_identities(GtkComboBox *combo, GList *identities)
 			uid_t uid = polkit_unix_user_get_uid(POLKIT_UNIX_USER(id));
 			struct passwd *pwd = getpwuid(uid);
 			str = g_strdup(pwd->pw_name);
+		} else if(POLKIT_IS_UNIX_GROUP(id)) {
+			gid_t gid = polkit_unix_group_get_gid(POLKIT_UNIX_GROUP(id));
+			struct group *grp = getgrgid(gid);
+			str = g_strdup_printf(_("Group: %s"), grp->gr_name);
 		} else {
 			str = polkit_identity_to_string(id);
 		}

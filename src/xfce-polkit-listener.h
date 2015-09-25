@@ -2,6 +2,7 @@
 
 #define POLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE
 #include <polkitagent/polkitagent.h>
+#include <polkit/polkit.h>
 
 G_BEGIN_DECLS
 
