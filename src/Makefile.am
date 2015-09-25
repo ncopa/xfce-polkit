@@ -1,7 +1,12 @@
 
+NULL=
 
 libexec_PROGRAMS = xfce-polkit
-xfce_polkit_SOURCES = xfce-polkit.c xfce-polkit-listener.c
+xfce_polkit_SOURCES = \
+	xfce-polkit.c \
+	xfce-polkit-listener.c \
+	xfce-polkit-listener.h \
+	$(NULL)
 
 xfce_polkit_CFLAGS = @GLIB_CFLAGS@ \
 	@LIBXFCE4UI_CFLAGS@ \

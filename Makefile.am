@@ -10,9 +10,11 @@ desktop_in_files = \
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
-	$(desktop_DATA) \
+	$(desktop_in_files) \
 	$(NULL)
 
 xfce-polkit.desktop: xfce-polkit.desktop.in
 	sed -e 's,@libexecdir@,$(libexecdir),' $< > $@
 
+clean-local:
+	-rm -f xfce-polkit.desktop
