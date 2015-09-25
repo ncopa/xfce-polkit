@@ -14,7 +14,7 @@ EXTRA_DIST = \
 	$(NULL)
 
 xfce-polkit.desktop: xfce-polkit.desktop.in
-	sed -e 's,@libexecdir@,$(libexecdir),' $< > $@
+	sed -e 's,@xfce_polkit_libexecdir@,$(libexecdir),' $< > $@
 
 clean-local:
 	-rm -f xfce-polkit.desktop
