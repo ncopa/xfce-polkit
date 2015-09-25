@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+_Name=XFCE PolKit
+_Comment=Policykit Authentication Agent
+Exec=@libexecdir@/xfce-polkit
+Icon=gtk-dialog-authentication
+NotShowIn=GNOME;KDE;
