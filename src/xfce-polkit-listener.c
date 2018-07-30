@@ -169,13 +169,13 @@ static void add_identities(GtkComboBox *combo, GList *identities)
 static GtkWidget *grid2x2(GtkWidget *top_left, GtkWidget *top_right,
 			 GtkWidget *bottom_left, GtkWidget *bottom_right)
 {
-	GtkWidget *table = gtk_table_new(2, 2, FALSE);
-	gtk_table_attach_defaults(GTK_TABLE(table), top_left, 0, 1, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), top_right, 1, 2, 0, 1);
-	gtk_table_attach_defaults(GTK_TABLE(table), bottom_left, 0, 1, 1, 2);
-	gtk_table_attach_defaults(GTK_TABLE(table), bottom_right, 1, 2, 1, 2);
-	gtk_widget_show(table);
-	return table;
+	GtkWidget *grid = gtk_grid_new();
+	gtk_grid_attach(GTK_GRID(grid), top_left, 0, 0, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), top_right, 1, 0, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), bottom_left, 0, 1, 1, 1);
+	gtk_grid_attach(GTK_GRID(grid), bottom_right, 1, 1, 1, 1);
+	gtk_widget_show(grid);
+	return grid;
 }
 
 static void initiate_authentication(PolkitAgentListener  *listener,
