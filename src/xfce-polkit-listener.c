@@ -204,11 +204,11 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	d->action_id = g_strdup(action_id);
 	d->cookie = g_strdup(cookie);
 	d->auth_dlg = xfce_message_dialog_new(NULL, "XFCE",
-			GTK_STOCK_DIALOG_AUTHENTICATION,
+			"dialog-password",
 			"XFCE PolicyKit Agent",
 			message,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OK, GTK_RESPONSE_OK,
+			"_Cancel", GTK_RESPONSE_CANCEL,
+			"_Ok", GTK_RESPONSE_OK,
 			NULL);
 	content = gtk_dialog_get_content_area(GTK_DIALOG(d->auth_dlg));
 
