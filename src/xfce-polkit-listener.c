@@ -249,19 +249,13 @@ static gboolean initiate_authentication_finish(PolkitAgentListener *listener,
 				 GAsyncResult *res, GError **error)
 {
 	g_debug("initiate_authentication_finish");
-	return !g_simple_async_result_propagate_error(G_SIMPLE_ASYNC_RESULT(res),
-						      error);
+	return !g_task_propagate_boolean(G_TASK(res), error);
 }
 
 static void xfce_polkit_listener_finalize(GObject *object)
 {
-	XfcePolkitListener *self;
-
 	g_return_if_fail(object != NULL);
 	g_return_if_fail(XFCE_IS_POLKIT_LISTENER(object));
-
-	self = XFCE_POLKIT_LISTENER(object);
-
 	G_OBJECT_CLASS(xfce_polkit_listener_parent_class)->finalize(object);
 }
 
