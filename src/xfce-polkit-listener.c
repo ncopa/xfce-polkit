@@ -170,6 +170,10 @@ static GtkWidget *grid2x2(GtkWidget *top_left, GtkWidget *top_right,
 			 GtkWidget *bottom_left, GtkWidget *bottom_right)
 {
 	GtkWidget *grid = gtk_grid_new();
+	gtk_grid_set_column_spacing(GTK_GRID(grid), 12);
+	gtk_grid_set_row_spacing(GTK_GRID(grid), 6);
+	gtk_container_set_border_width(GTK_CONTAINER(grid), 12);
+
 	gtk_grid_attach(GTK_GRID(grid), top_left, 0, 0, 1, 1);
 	gtk_grid_attach(GTK_GRID(grid), top_right, 1, 0, 1, 1);
 	gtk_grid_attach(GTK_GRID(grid), bottom_left, 0, 1, 1, 1);
@@ -203,16 +207,19 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	d->cancellable = cancellable;
 	d->action_id = g_strdup(action_id);
 	d->cookie = g_strdup(cookie);
-	d->auth_dlg = xfce_message_dialog_new(NULL, "XFCE",
-			"dialog-password",
-			"XFCE PolicyKit Agent",
-			message,
-			"_Cancel", GTK_RESPONSE_CANCEL,
-			"_Ok", GTK_RESPONSE_OK,
+	d->auth_dlg = xfce_titled_dialog_new_with_buttons(
+			"Authentication required",
+			NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+			"_Deny", GTK_RESPONSE_CANCEL,
+			"_Allow", GTK_RESPONSE_OK,
 			NULL);
+	xfce_titled_dialog_set_subtitle(XFCE_TITLED_DIALOG(d->auth_dlg), message);
+	gtk_window_set_icon_name(GTK_WINDOW(d->auth_dlg), "dialog-password");
+
 	content = gtk_dialog_get_content_area(GTK_DIALOG(d->auth_dlg));
 
 	combo_label = gtk_label_new("Identity:");
+	gtk_widget_set_halign(combo_label, GTK_ALIGN_END);
 	gtk_widget_show(combo_label);
 
 	d->id_combo = gtk_combo_box_new();
@@ -220,13 +227,16 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	g_signal_connect(d->id_combo, "changed",
 			 G_CALLBACK(on_id_combo_user_changed), d);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(d->id_combo), 0);
+	gtk_widget_set_hexpand(d->id_combo, TRUE);
 	gtk_widget_show(d->id_combo);
 
 	d->entry_label = gtk_label_new(NULL);
+	gtk_widget_set_halign(d->entry_label, GTK_ALIGN_END);
 	gtk_widget_show(d->entry_label);
 
 	d->entry = gtk_entry_new();
 	gtk_entry_set_visibility(GTK_ENTRY(d->entry), FALSE);
+	gtk_widget_set_hexpand(d->entry, TRUE);
 	gtk_widget_show(d->entry);
 	g_signal_connect (d->entry, "activate", G_CALLBACK(on_entry_activate), d);
 
