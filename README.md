@@ -4,17 +4,17 @@ xfce-polkit
 A simple PolicyKit authentication agent for XFCE
 
 # Installation
+
 Run the following commands at the root of the repository:
 ```
-aclocal
-autoconf
-automake --add-missing --foreign
-./configure
-make
+mkdir build
+cd build
+meson --prefix=/usr ..
+ninja
 ```
 to compile, then run
 ```
-make install
+ninja install
 ```
 as root to install.
 
