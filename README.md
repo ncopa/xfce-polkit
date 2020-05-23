@@ -3,6 +3,14 @@ xfce-polkit
 
 A simple PolicyKit authentication agent for XFCE
 
+# Required packages
+
+xfce-polkit depends on the following packages:
+
+- glib
+- libxfce4ui
+- polkit
+
 # Installation
 
 Run the following commands at the root of the repository:
