@@ -215,6 +215,7 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 			NULL);
 	xfce_titled_dialog_set_subtitle(XFCE_TITLED_DIALOG(d->auth_dlg), message);
 	gtk_window_set_icon_name(GTK_WINDOW(d->auth_dlg), "dialog-password");
+	gtk_window_set_position(GTK_WINDOW(d->auth_dlg), GTK_WIN_POS_CENTER_ALWAYS);
 
 	content = gtk_dialog_get_content_area(GTK_DIALOG(d->auth_dlg));
 
