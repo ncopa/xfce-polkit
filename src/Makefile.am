@@ -10,11 +10,13 @@ xfce_polkit_SOURCES = \
 
 xfce_polkit_CFLAGS = @GLIB_CFLAGS@ \
 	@LIBXFCE4UI_CFLAGS@ \
+	@GTK3_CFLAGS@ \
 	@POLKIT_AGENT_CFLAGS@
 
 
 xfce_polkit_LDADD = @GLIB_LIBS@ \
 	@LIBXFCE4UI_LIBS@ \
+	@GTK3_LIBS@ \
 	@POLKIT_AGENT_LIBS@
 
 
