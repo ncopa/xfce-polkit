@@ -4,5 +4,4 @@ Name=XFCE PolKit
 Comment=Policykit Authentication Agent
 Exec=@xfce_polkit_libexecdir@/xfce-polkit
 Icon=gtk-dialog-authentication
-NotShowIn=GNOME;KDE;
 OnlyShowIn=XFCE;
