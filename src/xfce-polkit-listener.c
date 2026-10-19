@@ -1,6 +1,7 @@
 
 #include <grp.h>
 #include <pwd.h>
+#include <unistd.h>
 #include <libxfce4ui/libxfce4ui.h>
 
 #include "xfce-polkit-listener.h"
@@ -83,15 +84,13 @@ static void on_session_request(PolkitAgentSession* session, gchar *req,
 static void on_session_show_error(PolkitAgentSession *session, gchar *text,
 				  AuthDlgData *d)
 {
-	xfce_dialog_show_warning(GTK_WINDOW(d->auth_dlg), text,
-			       "XFCE PolicyKit Agent");
+	gtk_label_set_text(GTK_LABEL(d->status), text);
 }
 
 static void on_session_show_info(PolkitAgentSession *session, gchar *text,
 				  AuthDlgData *d)
 {
-	xfce_dialog_show_info(GTK_WINDOW(d->auth_dlg), text,
-			      "XFCE PolicyKit Agent");
+	gtk_label_set_text(GTK_LABEL(d->status), text);
 }
 
 static void on_id_combo_user_changed(GtkComboBox *combo, AuthDlgData *d)
@@ -196,6 +195,9 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	GtkWidget *content;
 	GtkWidget *combo_label;
 	GtkWidget *grid;
+	GList *identity;
+	gint preferred_identity = 0;
+	gint identity_index = 0;
 	AuthDlgData *d = g_slice_new0(AuthDlgData);
 
 	char** p;
@@ -225,9 +227,17 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 
 	d->id_combo = gtk_combo_box_new();
 	add_identities(GTK_COMBO_BOX(d->id_combo), identities);
+	for (identity = identities; identity != NULL; identity = identity->next, identity_index++) {
+		PolkitIdentity *id = identity->data;
+		if (POLKIT_IS_UNIX_USER(id) &&
+		    polkit_unix_user_get_uid(POLKIT_UNIX_USER(id)) == getuid()) {
+			preferred_identity = identity_index;
+			break;
+		}
+	}
 	g_signal_connect(d->id_combo, "changed",
 			 G_CALLBACK(on_id_combo_user_changed), d);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(d->id_combo), 0);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(d->id_combo), preferred_identity);
 	gtk_widget_set_hexpand(d->id_combo, TRUE);
 	gtk_widget_show(d->id_combo);
 
@@ -245,6 +255,7 @@ static void initiate_authentication(PolkitAgentListener  *listener,
 	gtk_box_pack_start(GTK_BOX(content), grid, TRUE, TRUE, 0);
 
 	d->status = gtk_label_new(NULL);
+	gtk_label_set_line_wrap(GTK_LABEL(d->status), TRUE);
 	gtk_box_pack_start(GTK_BOX(content), d->status, TRUE, TRUE, 0);
 	gtk_widget_show(d->status);
 
